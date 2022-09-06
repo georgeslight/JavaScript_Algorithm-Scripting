@@ -11,3 +11,7 @@ In this course, you'll learn the fundamentals of algorithmic thinking by writing
 ## Intermediate Algorithm Scripting
 
 Now that you know the basics of algorithmic thinking, along with OOP and Functional Programming, test your skills with the Intermediate Algorithm Scripting challenges.
+
+## JavaScript Algorithms and Data Structures Projects
+
+This is it — time to put your new JavaScript skills to work. These projects are similar to the algorithm scripting challenges you've done before – just much more difficult.
