@@ -15,7 +15,6 @@
 
 function palindrome(str) {
   const arr = str.toLowerCase().split("").filter(char => char >= 'a' && char <= 'z' || char >= '0' && char <= '9');
-  console.log(arr);
   for (let i = 0; i < arr.length; i++) {
       if (arr[i] !== arr[arr.length - 1 - i]) return false;
   }
