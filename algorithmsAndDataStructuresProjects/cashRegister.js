@@ -24,28 +24,31 @@ function checkCashRegister(price, cash, cid) {
     change: []
   }
 
-  let changeNeeded = (cash - price).toFixed(2);
-  let changeAvailable = cid.reduce((acc, curr) => acc + curr[1], 0).toFixed(2);
+  let changeNeeded = Number((cash - price).toFixed(2));
+  let changeAvailable = Number(cid.reduce((acc, curr) => acc + curr[1], 0).toFixed(2));
 
-  changeNeeded > changeAvailable ? register.status = "INSUFFICIENT_FUNDS" : changeNeeded < changeAvailable ? register.status = "OPEN" : register.status = "CLOSED";
+  if (changeNeeded > changeAvailable) return { status: "INSUFFICIENT_FUNDS", change: [] };
+  if (changeNeeded === changeAvailable) return { status: "CLOSED", change: cid };
+  if (changeNeeded < changeAvailable) register.status = "OPEN";
+  console.log(changeNeeded);
 
   const currency = {
-    "ONE HUNDRED": 100,
-    "TWENTY": 20,
-    "TEN": 10,
-    "FIVE": 5,
-    "ONE": 1,
+    "ONE HUNDRED": 100.00,
+    "TWENTY": 20.00,
+    "TEN": 10.00,
+    "FIVE": 5.00,
+    "ONE": 1.00,
     "QUARTER": 0.25,
-    "DIME": 0.1,
-    "NICKEL": 0.02, 
-    "PENNY": 0.01   
+    "DIME": 0.10,
+    "NICKEL": 0.05,
+    "PENNY": 0.01
   }
 
   for (let i = cid.length - 1; i >= 0; i--) {
     const coinName = cid[i][0];
     const coinTotal = cid[i][1];
-    const coinValue = currency[coinName];
-    let coinAmount = (coinTotal / coinValue).toFixed(2);
+    const coinValue = Number(currency[coinName]);
+    let coinAmount = Number((coinTotal / coinValue).toFixed(2));
     let coinsToReturn = 0;
 
     while (changeNeeded >= coinValue && coinAmount > 0) {
@@ -55,21 +58,10 @@ function checkCashRegister(price, cash, cid) {
       coinsToReturn++;
     }
 
-    if (coinsToReturn > 0) {
-      register.change.push([coinName, coinsToReturn * coinValue]);
-    }
+    if (coinsToReturn > 0) register.change.push([coinName, Number(coinsToReturn * coinValue)]);
   }
 
-  if (changeNeeded > changeAvailable) {
-    register.status = "INSUFFICIENT_FUNDS";
-    register.change = [];
-  }
-
-  if (register.status === "CLOSED") {
-    register.change = [...cid]
-  }
-
-  console.log(register.change);
+  if (changeNeeded > register.change.reduce((acc, curr) => acc + curr[1], 0)) return { status: "INSUFFICIENT_FUNDS", change: [] };
   
   return register;
 }
